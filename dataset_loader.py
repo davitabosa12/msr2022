@@ -24,6 +24,9 @@ def load_dataset():
     std_times_three = std * 3
     low_cut, hi_cut = mean - std_times_three, mean + std_times_three
     df_issues_no_outliers = df_issues.loc[(low_cut < df_issues["time_to_complete"]) & (df_issues["time_to_complete"] < hi_cut)]
+    # remove duplicate issues (with the tag)
+    DUPLICATE_LABEL_NODE_ID = "MDU6TGFiZWwzMDg4OTExODk5"
+    df_issues_no_outliers = df_issues_no_outliers.loc[~df_issues_no_outliers["labels"].str.contains(DUPLICATE_LABEL_NODE_ID)]
     # Convert labels to binary number
     label_set = set(sorted(label_set, key=lambda label: label.name))
     def convert_label_to_number(label: str):
